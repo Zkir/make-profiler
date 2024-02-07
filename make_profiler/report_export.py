@@ -6,7 +6,7 @@ status_list = {}
 status = []
 
 
-def export_report(performance, docs, targets):
+def export_report(performance, docs, targets, dependencies):
     strOutputFile = 'report.json'
     fo = open(strOutputFile, 'w', encoding="utf-8")
     n_in_progress = 0
@@ -80,7 +80,8 @@ def export_report(performance, docs, targets):
                  "targetTime": event_time,
                  "targetDuration": event_duration,
                  "lastTargetCompletionTime": last_event_time,
-                 "targetLog": rec["log"]
+                 "targetLog": rec["log"],
+                 "dependencies": dependencies[key]
                  }
             )
 
@@ -88,7 +89,8 @@ def export_report(performance, docs, targets):
         status.append({
             "targetName": target,
             "targetDescription": docs.get(target, ''),
-            "targetType": "never started"
+            "targetType": "never started",
+            "dependencies": (dependencies.get(target,((),())))
         })
 
     if n_in_progress > 0:
@@ -110,6 +112,6 @@ def export_report(performance, docs, targets):
     status_list["pipeline"] = pipeline
     status_list["status"] = status
 
-    fo.write(json.dumps(status_list))
+    fo.write(json.dumps(status_list, indent=4) )
 
     fo.close()

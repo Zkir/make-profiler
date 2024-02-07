@@ -116,7 +116,8 @@ def main(argv=sys.argv[1:]):
     export_report(
         performance,
         docs,
-        influences.keys()
+        influences.keys(),
+        deps
     )
 
 
